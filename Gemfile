@@ -73,6 +73,7 @@ group :production do
 end
 
 group :test do
+  gem 'rails-controller-testing'
   gem 'capybara'
   gem 'capybara-screenshot'
   gem 'codeclimate-test-reporter', require: nil

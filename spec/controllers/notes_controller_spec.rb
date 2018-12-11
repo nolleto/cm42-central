@@ -9,12 +9,12 @@ describe NotesController do
   context 'when not logged in' do
     describe 'collection actions' do
       specify '#index' do
-        xhr :get, :index, request_params
+        get :index, xhr: true, params: request_params
         expect(response.status).to eq(401)
       end
 
       specify '#create' do
-        xhr :post, :create, request_params
+        post :create, xhr: true, params: request_params
         expect(response.status).to eq(401)
       end
     end
@@ -26,12 +26,12 @@ describe NotesController do
       end
 
       specify '#show' do
-        xhr :get, :show, request_params
+        get :show, xhr: true, params: request_params
         expect(response.status).to eq(401)
       end
 
       specify '#destroy' do
-        xhr :delete, :destroy, request_params
+        delete :destroy, xhr: true, params: request_params
         expect(response.status).to eq(401)
       end
     end
@@ -46,7 +46,7 @@ describe NotesController do
     describe 'collection actions' do
       describe '#index' do
         specify do
-          xhr :get, :index, request_params
+          get :index, xhr: true, params: request_params
           expect(response).to be_success
           expect(assigns[:project]).to eq(project)
           expect(assigns[:story]).to eq(story)
@@ -58,7 +58,7 @@ describe NotesController do
 
       describe '#create' do
         specify do
-          xhr :post, :create, request_params.merge(note: { note: 'bar' })
+          post :create, xhr: true, params: request_params.merge(note: { note: 'bar' })
           expect(response).to be_success
           expect(assigns[:project]).to eq(project)
           expect(assigns[:story]).to eq(story)
@@ -69,7 +69,7 @@ describe NotesController do
 
         context 'when save fails' do
           specify do
-            xhr :post, :create, request_params.merge(note: { note: '' })
+            post :create, xhr: true, params: request_params.merge(note: { note: '' })
             expect(response.status).to eq(422)
           end
         end
@@ -84,7 +84,7 @@ describe NotesController do
 
       describe '#show' do
         specify do
-          xhr :get, :show, request_params
+          get :show, xhr: true, params: request_params
           expect(response).to be_success
           expect(assigns[:project]).to eq(project)
           expect(assigns[:story]).to eq(story)
@@ -96,7 +96,7 @@ describe NotesController do
 
       describe '#destroy' do
         specify do
-          xhr :delete, :destroy, request_params
+          delete :destroy, xhr: true, params: request_params
           expect(response).to be_success
           expect(assigns[:project]).to eq(project)
           expect(assigns[:story]).to eq(story)

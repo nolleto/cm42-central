@@ -4,14 +4,14 @@ describe StoriesController do
   describe 'when logged out' do
     %w[index done backlog in_progress create].each do |action|
       specify do
-        get action, project_id: 99
+        get action, params: { project_id: 99 }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
 
     %w[show update destroy].each do |action|
       specify do
-        get action, project_id: 99, id: 42
+        get action, params: { project_id: 99, id: 42 }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -28,7 +28,7 @@ describe StoriesController do
     context 'when user has permissions' do
       before do
         sign_in user
-        xhr :put, :sort, project_id: project.id, ordered_ids: [story2.id, story1.id]
+        put :sort, xhr: true, params: { project_id: project.id, ordered_ids: [story2.id, story1.id] }
       end
 
       it 'orders stories in the requested order' do
@@ -43,7 +43,7 @@ describe StoriesController do
 
       before do
         sign_in unauthorized_user
-        xhr :put, :sort, project_id: project.id, ordered_ids: [story2.id, story1.id]
+        put :sort, xhr: true, params: { project_id: project.id, ordered_ids: [story2.id, story1.id] }
       end
 
       it 'is unauthorized' do
@@ -58,7 +58,7 @@ describe StoriesController do
 
       before do
         sign_in user
-        xhr :put, :sort, project_id: project.id, ordered_ids: [story2.id, story1.id, story3.id]
+        put :sort, xhr: true, params: { project_id: project.id, ordered_ids: [story2.id, story1.id, story3.id] }
       end
 
       it ' is unauthorized' do
@@ -84,7 +84,7 @@ describe StoriesController do
 
     describe '#index' do
       specify do
-        xhr :get, :index, project_id: project.id
+        get :index, xhr: true, params: { project_id: project.id }
         expect(response).to be_success
         expect(response.body).to eq(project.stories.to_json)
       end
@@ -139,7 +139,7 @@ describe StoriesController do
           VCR.use_cassette('cloudinary_upload') do
             VCR.use_cassette('pusher_notification', match_requests_on: [:host, :path]) do
               expect do
-                xhr :put, :update, project_id: project.id, id: story.id, story: story_params
+                put :update, xhr: true, params: { project_id: project.id, id: story.id, story: story_params }
               end.not_to change { story.reload; story.documents.count }
             end
           end
@@ -148,7 +148,7 @@ describe StoriesController do
         it 'should respond with success' do
           VCR.use_cassette('cloudinary_upload_2') do
             VCR.use_cassette('pusher_notification_2', match_requests_on: [:host, :path]) do
-              xhr :put, :update, project_id: project.id, id: story.id, story: story_params
+              put :update, xhr: true, params: { project_id: project.id, id: story.id, story: story_params }
               expect(response).to be_success
             end
           end
@@ -156,7 +156,11 @@ describe StoriesController do
 
         it 'should delete all documents (resilient against deep_munge rails/rails#13420)' do
           expect(story.documents.count).to eq(2)
-          xhr :put, :update, project_id: project.id, id: story.id, story: ActionDispatch::Request::Utils.deep_munge({ documents: [] })
+          put :update, xhr: true, params: {
+            project_id: project.id,
+            id: story.id,
+            story: { documents: [nil] }
+          }
           story.reload
           expect(story.documents.count).to eq(0)
         end
@@ -202,7 +206,7 @@ describe StoriesController do
         VCR.use_cassette('cloudinary_upload_new_story') do
           VCR.use_cassette('pusher_notification', match_requests_on: [:host, :path]) do
             expect do
-              xhr :post, :create, received_params
+              post :create, xhr: true, params: received_params
             end.to change { Story.count }.by(1)
           end
         end
@@ -215,7 +219,7 @@ describe StoriesController do
 
       describe '#show' do
         specify do
-          xhr :get, :show, project_id: project.id, id: story.id
+          get :show, xhr: true, params: { project_id: project.id, id: story.id }
           expect(response).to be_success
           expect(response.body).to eq(story.to_json)
         end
@@ -224,7 +228,7 @@ describe StoriesController do
       describe '#update' do
         context 'when update succeeds' do
           specify do
-            xhr :get, :update, project_id: project.id, id: story.id, story: story_params
+            get :update, xhr: true, params: { project_id: project.id, id: story.id, story: story_params }
             expect(response).to be_success
             expect(response.body).to eq(assigns[:story].to_json)
           end
@@ -232,7 +236,7 @@ describe StoriesController do
 
         context 'when update fails' do
           specify do
-            xhr :get, :update, project_id: project.id, id: story.id, story: { title: '' }
+            get :update, xhr: true, params: { project_id: project.id, id: story.id, story: { title: '' } }
             expect(response.status).to eq(422)
             expect(response.body).to eq(assigns[:story].to_json)
           end
@@ -241,7 +245,7 @@ describe StoriesController do
 
       describe '#destroy' do
         specify do
-          xhr :delete, :destroy, project_id: project.id, id: story.id
+          delete :destroy, xhr: true, params: { project_id: project.id, id: story.id }
           expect(response).to be_success
         end
       end
@@ -249,7 +253,7 @@ describe StoriesController do
       %w[done backlog in_progress].each do |action|
         describe action do
           specify do
-            xhr :get, action, project_id: project.id, id: story.id
+            get action, xhr: true, params: {  project_id: project.id, id: story.id }
             expect(response).to be_success
             expect(response.body).to eq(assigns[:stories].to_json)
           end
@@ -259,7 +263,7 @@ describe StoriesController do
       describe '#create' do
         context 'when save succeeds' do
           specify do
-            xhr :post, :create, project_id: project.id, story: story_params
+            post :create, xhr: true, params: {  project_id: project.id, story: story_params }
             expect(response).to be_success
             expect(response.body).to eq(assigns[:story].to_json)
           end
@@ -267,7 +271,7 @@ describe StoriesController do
 
         context 'when save fails' do
           specify do
-            xhr :post, :create, project_id: project.id, story: { title: '' }
+            post :create, xhr: true, params: { project_id: project.id, story: { title: '' } }
             expect(response.status).to eq(422)
             expect(response.body).to eq(assigns[:story].to_json)
           end

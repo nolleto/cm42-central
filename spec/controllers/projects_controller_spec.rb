@@ -23,7 +23,7 @@ describe ProjectsController do
       join
     ].each do |action|
       specify do
-        get action, id: 42
+        get action, params: { id: 42 }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -58,7 +58,7 @@ describe ProjectsController do
 
             before do
               team.ownerships.create(project: public_project, is_owner: true)
-              get :join, id: public_project.slug
+              get :join, params: { id: public_project.slug }
             end
 
             it 'should join to the project' do
@@ -75,11 +75,11 @@ describe ProjectsController do
             before do
               team.ownerships.create(project: private_project, is_owner: true)
 
-              get :join, id: private_project.slug
+              get :join, params: { id: private_project.slug }
             end
 
             it 'should not join to the project' do
-              get :join, id: private_project.slug
+              get :join, params: { id: private_project.slug }
 
               expect(user.projects).not_to eq(private_project)
             end
@@ -125,7 +125,7 @@ describe ProjectsController do
           let(:project_params) { { 'name' => 'Test Project', 'mail_reports' => '0' } }
 
           specify do
-            post :create, project: project_params
+            post :create, params: { project: project_params }
             expect(assigns[:project].name).to eq(project_params['name'])
             expect(assigns[:project].users).to include(user)
             expect(assigns[:project].teams).to include(user.teams.first)
@@ -135,7 +135,7 @@ describe ProjectsController do
 
           context 'when save succeeds' do
             specify do
-              post :create, project: project_params
+              post :create, params: { project: project_params }
               expect(response).to redirect_to(project_url(assigns[:project]))
               expect(flash[:notice]).to eq('Project was successfully created.')
             end
@@ -143,7 +143,7 @@ describe ProjectsController do
 
           context 'when save fails' do
             specify do
-              post :create, project: {}
+              post :create, params: { project: { name: nil } }
               expect(response).to be_success
               expect(response).to render_template('new')
             end
@@ -176,7 +176,7 @@ describe ProjectsController do
         describe '#show' do
           context 'as html' do
             specify do
-              get :show, id: project.id
+              get :show, params: {id: project.id }
               expect(response).to be_success
               expect(assigns[:project]).to eq(project)
               expect(assigns[:story].new_record?).to be_truthy
@@ -186,7 +186,7 @@ describe ProjectsController do
 
           context 'as json' do
             specify do
-              xhr :get, :show, id: project.id
+              get :show, xhr: true, params: { id: project.id }
               expect(response).to be_success
               expect(assigns[:project]).to eq(project)
               expect(assigns[:story].new_record?).to be_truthy
@@ -197,7 +197,7 @@ describe ProjectsController do
 
         describe '#edit' do
           specify do
-            get :edit, id: project.id
+            get :edit, params: { id: project.id }
             expect(response).to be_success
             expect(assigns[:project]).to eq(project)
           end
@@ -207,20 +207,20 @@ describe ProjectsController do
           let(:project_params) { { name: 'New Project Title' } }
 
           specify do
-            put :update, id: project.id, project: project_params
+            put :update, params: { id: project.id, project: project_params }
             expect(assigns[:project].name).to eq('New Project Title')
           end
 
           context 'when update succeeds' do
             specify do
-              put :update, id: project.id, project: project_params
+              put :update, params: { id: project.id, project: project_params }
               expect(response).to redirect_to(project_url(assigns[:project]))
             end
           end
 
           context 'when update fails' do
             specify do
-              put :update, id: project.id, project: { 'point_scale' => 'xyz' }
+              put :update, params: { id: project.id, project: {point_scale: 'xyz'} }
               expect(response).to be_success
               expect(response).to render_template('edit')
             end
@@ -229,7 +229,7 @@ describe ProjectsController do
 
         describe '#join' do
           specify do
-            get :join, id: project.slug
+            get :join, params: { id: project.slug }
             expect(response).to redirect_to(root_url)
           end
         end
@@ -238,7 +238,7 @@ describe ProjectsController do
           before { project.update_attributes(archived_at: Time.current) }
 
           specify do
-            patch :unarchive, id: project.id
+            patch :unarchive, params: { id: project.id }
             expect(assigns[:project].archived_at).to be_nil
             expect(response).to redirect_to(project_url(assigns[:project]))
           end
@@ -247,14 +247,14 @@ describe ProjectsController do
         describe '#destroy' do
           context 'when project name_confirmation is invalid' do
             specify do
-              delete :destroy, id: project.id, name_confirmation: "wrong#{project.name}"
+              delete :destroy, params: { id: project.id, name_confirmation: "wrong#{project.name}" }
               expect(response).to redirect_to(edit_project_path)
             end
           end
 
           context 'when project name_confirmation is valid' do
             specify do
-              delete :destroy, id: project.id, name_confirmation: project.name
+              delete :destroy, params: { id: project.id, name_confirmation: project.name }
               expect(response).to redirect_to(projects_url)
             end
           end
@@ -263,7 +263,7 @@ describe ProjectsController do
         describe '#import' do
           context 'when no job is running' do
             specify do
-              get :import, id: project.id
+              get :import, params: { id: project.id }
               expect(response).to be_success
               expect(assigns[:project]).to eq(project)
               expect(response).to render_template('import')
@@ -277,7 +277,7 @@ describe ProjectsController do
               end
 
               specify do
-                get :import, id: project.id
+                get :import, params: { id: project.id }
                 expect(assigns[:valid_stories]).to be_nil
                 expect(session[:import_job]).not_to be_nil
                 expect(response).to render_template('import')
@@ -290,7 +290,7 @@ describe ProjectsController do
               end
 
               specify do
-                get :import, id: project.id
+                get :import, params: { id: project.id }
                 expect(assigns[:valid_stories]).to be_nil
                 expect(session[:import_job]).to be_nil
                 expect(response).to render_template('import')
@@ -307,7 +307,7 @@ describe ProjectsController do
                   .and_return(invalid_stories: [], errors: error)
               end
               specify do
-                get :import, id: project.id
+                get :import, params: { id: project.id }
                 expect(assigns[:valid_stories]).to be_nil
                 expect(flash[:alert]).to eq('Unable to import CSV: Bad CSV!')
                 expect(session[:import_job]).to be_nil
@@ -326,7 +326,7 @@ describe ProjectsController do
               end
 
               specify do
-                get :import, id: project.id
+                get :import, params: { id: project.id }
                 expect(assigns[:valid_stories]).to eq([story])
                 expect(assigns[:invalid_stories]).to eq([invalid_story])
                 expect(flash[:notice]).to eq('Imported 1 story')
@@ -340,7 +340,7 @@ describe ProjectsController do
         describe '#import_upload' do
           context 'when csv file is missing' do
             specify do
-              put :import_upload, id: project.id
+              put :import_upload, params: { id: project.id }
               expect(response).to redirect_to(import_project_path(project))
               expect(flash[:alert])
                 .to eq('You must select a CSV file to import its stories to the project.')
@@ -361,7 +361,7 @@ describe ProjectsController do
                 .and_return(project)
 
               expect(ImportWorker).to receive(:perform_async)
-              put :import_upload, id: project.id, project: { import: csv }
+              put :import_upload, params: { id: project.id, project: { import: csv } }
 
               expect(flash[:notice]).to eq(
                 'Your uploaded CSV file is being processed. You can come back here ' \
@@ -381,9 +381,11 @@ describe ProjectsController do
             specify do
               patch(
                 :ownership,
-                id: project.id,
-                project: { slug: another_team.slug },
-                ownership_action: 'share'
+                params: {
+                  id: project.id,
+                  project: { slug: another_team.slug },
+                  ownership_action: 'share'
+                }
               )
 
               expect(team.ownerships.where(project: project).count).to be(1)
@@ -392,9 +394,11 @@ describe ProjectsController do
 
               patch(
                 :ownership,
-                id: project.id,
-                project: { slug: another_team.slug },
-                ownership_action: 'unshare'
+                params: {
+                  id: project.id,
+                  project: { slug: another_team.slug },
+                  ownership_action: 'unshare'
+                }
               )
 
               expect(team.ownerships.where(project: project).count).to be(1)
@@ -407,9 +411,11 @@ describe ProjectsController do
             specify do
               patch(
                 :ownership,
-                id: project.id,
-                project: { slug: another_team.slug },
-                ownership_action: 'transfer'
+                params: {
+                  id: project.id,
+                  project: { slug: another_team.slug },
+                  ownership_action: 'transfer'
+                }
               )
 
               expect(another_team.owns?(project)).to be_truthy

@@ -73,7 +73,7 @@ describe ActivityPresenter do
         expect(subject.description).to eq(
           "#{user_name} updated Story ##{story.id} - " \
           "'<a href=\"/projects/#{project.id}#story-#{story.id}\">Test story</a>' " \
-          "changing estimate to '2', description to 'new description'"
+          "changing description to 'new description', estimate to '2'"
         )
       end
 
@@ -120,8 +120,8 @@ describe ActivityPresenter do
         expect(subject.description).to eq(
           "#{user_name} updated Story ##{story.id} - " \
           "'<a href=\"/projects/#{project.id}#story-#{story.id}\">Test story</a>' " \
-          "changing estimate from '2' to '4', description to " \
-          "'<del class=\"differ\">old</del><ins class=\"differ\">new</ins> description', " \
+          "changing description to " \
+          "'<del class=\"differ\">old</del><ins class=\"differ\">new</ins> description', estimate from '2' to '4', " \
           'state moved forward to started'
         )
       end
