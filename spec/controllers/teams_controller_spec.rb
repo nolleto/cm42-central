@@ -40,7 +40,7 @@ describe TeamsController, type: :controller do
       context 'when save fails' do
         specify do
           post :create, params: { team: { name: nil } }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template('new')
         end
       end
@@ -66,7 +66,7 @@ describe TeamsController, type: :controller do
 
         it 'only list users this team to manage' do
           get :manage_users, params: { team_id: team.slug }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:users].count).to eq(3)
         end
       end
@@ -110,7 +110,7 @@ describe TeamsController, type: :controller do
       describe '#edit' do
         specify do
           get :edit, params: { id: 'xyz' }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:team]).to eq(team)
         end
       end
@@ -135,14 +135,14 @@ describe TeamsController, type: :controller do
           before { create :team, name: 'Team Hello' }
           specify do
             put :update, params: { id: 'xyz', team: { name: 'Team Hello' } }
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('edit')
           end
 
           context 'when name is empty' do
             specify do
               put :update, params: { id: 'xyz', team: { name: '' } }
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(response).to render_template('edit')
             end
           end
@@ -199,7 +199,7 @@ describe TeamsController, type: :controller do
       describe '#edit' do
         specify do
           get :edit, params: { id: 'xyz' }
-          expect(response).to_not be_success
+          expect(response).to_not be_successful
           expect(response).to redirect_to(root_path)
         end
       end
@@ -207,7 +207,7 @@ describe TeamsController, type: :controller do
       describe '#update' do
         specify do
           put :update, params: { id: 'xyz', team: { name: 'New Team Test' } }
-          expect(response).to_not be_success
+          expect(response).to_not be_successful
           expect(response).to redirect_to(root_path)
         end
       end
@@ -215,7 +215,7 @@ describe TeamsController, type: :controller do
       describe '#destroy' do
         specify do
           delete :destroy, params: { id: 'xyz' }
-          expect(response).to_not be_success
+          expect(response).to_not be_successful
           expect(response).to redirect_to(root_path)
         end
       end

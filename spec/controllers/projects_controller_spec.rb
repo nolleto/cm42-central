@@ -48,7 +48,7 @@ describe ProjectsController do
         describe '#index' do
           specify do
             get :index
-            expect(response).to be_success
+            expect(response).to be_successful
           end
         end
 
@@ -109,14 +109,14 @@ describe ProjectsController do
         describe '#index' do
           specify do
             get :index
-            expect(response).to be_success
+            expect(response).to be_successful
           end
         end
 
         describe '#new' do
           specify do
             get :new
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(assigns[:project]).to be_new_record
           end
         end
@@ -144,7 +144,7 @@ describe ProjectsController do
           context 'when save fails' do
             specify do
               post :create, params: { project: { name: nil } }
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(response).to render_template('new')
             end
           end
@@ -159,7 +159,7 @@ describe ProjectsController do
           end
 
           it 'returns success' do
-            expect(response).to be_success
+            expect(response).to be_successful
           end
 
           it 'assigns projects' do
@@ -177,7 +177,7 @@ describe ProjectsController do
           context 'as html' do
             specify do
               get :show, params: {id: project.id }
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(assigns[:project]).to eq(project)
               expect(assigns[:story].new_record?).to be_truthy
               expect(assigns[:story].project).to eq(project)
@@ -187,7 +187,7 @@ describe ProjectsController do
           context 'as json' do
             specify do
               get :show, xhr: true, params: { id: project.id }
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(assigns[:project]).to eq(project)
               expect(assigns[:story].new_record?).to be_truthy
               expect(assigns[:story].project).to eq(project)
@@ -198,7 +198,7 @@ describe ProjectsController do
         describe '#edit' do
           specify do
             get :edit, params: { id: project.id }
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(assigns[:project]).to eq(project)
           end
         end
@@ -221,7 +221,7 @@ describe ProjectsController do
           context 'when update fails' do
             specify do
               put :update, params: { id: project.id, project: {point_scale: 'xyz'} }
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(response).to render_template('edit')
             end
           end
@@ -264,7 +264,7 @@ describe ProjectsController do
           context 'when no job is running' do
             specify do
               get :import, params: { id: project.id }
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(assigns[:project]).to eq(project)
               expect(response).to render_template('import')
             end

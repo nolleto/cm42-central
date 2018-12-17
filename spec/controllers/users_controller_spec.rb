@@ -4,7 +4,7 @@ shared_examples_for '#index' do
   context 'as html' do
     specify do
       get :index, params: { project_id: project.id }
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns[:project]).to eq(project)
     end
   end
@@ -12,7 +12,7 @@ shared_examples_for '#index' do
   context 'as json' do
     specify do
       get :index, xhr: true, params: { project_id: project.id, format: :json }
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response.body).to eq(project.users.to_json)
     end
   end

@@ -28,7 +28,7 @@ describe Admin::UsersController do
       describe '#index' do
         specify do
           get :index
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:users]).to eq([user])
         end
       end
@@ -38,7 +38,7 @@ describe Admin::UsersController do
       describe '#edit' do
         specify do
           get :edit, params: { id: user.id }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:user]).to eq(user)
         end
       end
@@ -114,7 +114,7 @@ describe Admin::UsersController do
       describe '#index' do
         specify do
           get :index
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:users]).to eq([])
         end
       end

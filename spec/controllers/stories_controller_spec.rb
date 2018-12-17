@@ -85,7 +85,7 @@ describe StoriesController do
     describe '#index' do
       specify do
         get :index, xhr: true, params: { project_id: project.id }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.body).to eq(project.stories.to_json)
       end
     end
@@ -149,7 +149,7 @@ describe StoriesController do
           VCR.use_cassette('cloudinary_upload_2') do
             VCR.use_cassette('pusher_notification_2', match_requests_on: [:host, :path]) do
               put :update, xhr: true, params: { project_id: project.id, id: story.id, story: story_params }
-              expect(response).to be_success
+              expect(response).to be_successful
             end
           end
         end
@@ -220,7 +220,7 @@ describe StoriesController do
       describe '#show' do
         specify do
           get :show, xhr: true, params: { project_id: project.id, id: story.id }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response.body).to eq(story.to_json)
         end
       end
@@ -229,7 +229,7 @@ describe StoriesController do
         context 'when update succeeds' do
           specify do
             get :update, xhr: true, params: { project_id: project.id, id: story.id, story: story_params }
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response.body).to eq(assigns[:story].to_json)
           end
         end
@@ -246,7 +246,7 @@ describe StoriesController do
       describe '#destroy' do
         specify do
           delete :destroy, xhr: true, params: { project_id: project.id, id: story.id }
-          expect(response).to be_success
+          expect(response).to be_successful
         end
       end
 
@@ -254,7 +254,7 @@ describe StoriesController do
         describe action do
           specify do
             get action, xhr: true, params: {  project_id: project.id, id: story.id }
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response.body).to eq(assigns[:stories].to_json)
           end
         end
@@ -264,7 +264,7 @@ describe StoriesController do
         context 'when save succeeds' do
           specify do
             post :create, xhr: true, params: {  project_id: project.id, story: story_params }
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response.body).to eq(assigns[:story].to_json)
           end
         end

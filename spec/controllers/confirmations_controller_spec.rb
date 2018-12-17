@@ -33,7 +33,7 @@ describe ConfirmationsController do
   describe '#new' do
     specify do
       get :new
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -41,7 +41,7 @@ describe ConfirmationsController do
     context 'when user is invalid' do
       specify do
         post :create, params: { user: { name: nil } }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

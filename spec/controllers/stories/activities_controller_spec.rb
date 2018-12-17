@@ -26,7 +26,7 @@ describe Stories::ActivitiesController do
       end
 
       it 'returns a successful response' do
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'returns all the activities from a Story' do

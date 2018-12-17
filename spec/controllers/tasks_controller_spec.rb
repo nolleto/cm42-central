@@ -40,7 +40,7 @@ describe TasksController do
         post :create, xhr: true, params: request_params.merge(task: { name: 'task name' })
 
         task = assigns[:task]
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns[:project]).to eq(project)
         expect(assigns[:story]).to eq(story)
         expect(task).to_not be_nil
@@ -61,7 +61,7 @@ describe TasksController do
         task = create(:task, story: story)
 
         delete :destroy, xhr: true, params: request_params.merge(id: task.id)
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns[:project]).to eq(project)
         expect(assigns[:story]).to eq(story)
         expect(assigns[:task]).to eq(task)
@@ -74,7 +74,7 @@ describe TasksController do
         task = create(:task, story: story)
 
         put :update, xhr: true, params: request_params.merge(id: task.id, task: { done: true })
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns[:project]).to eq(project)
         expect(assigns[:story]).to eq(story)
         expect(assigns[:task]).to eq(task)

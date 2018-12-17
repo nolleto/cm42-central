@@ -34,7 +34,7 @@ describe IntegrationsController do
 
           specify do
             get :index, params: { project_id: project.id }
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(assigns[:project]).to eq(project)
             expect(assigns[:integrations][0]).to eq(integration)
           end
@@ -43,7 +43,7 @@ describe IntegrationsController do
         context 'as html with no integrations' do
           specify do
             get :index, params: { project_id: project.id }
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(assigns[:project]).to eq(project)
             expect(assigns[:integrations].count).to eq(3)
             expect(assigns[:integrations].first.kind).to eq('discord')
@@ -55,7 +55,7 @@ describe IntegrationsController do
 
           specify do
             get :index, xhr: true, params: { project_id: project.id, format: :json}
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(JSON.parse(response.body).first['integration']['data']).to eql(integration.data)
           end
         end

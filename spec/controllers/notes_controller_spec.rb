@@ -47,7 +47,7 @@ describe NotesController do
       describe '#index' do
         specify do
           get :index, xhr: true, params: request_params
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:project]).to eq(project)
           expect(assigns[:story]).to eq(story)
           expect(assigns[:notes]).to eq(story.notes)
@@ -59,7 +59,7 @@ describe NotesController do
       describe '#create' do
         specify do
           post :create, xhr: true, params: request_params.merge(note: { note: 'bar' })
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:project]).to eq(project)
           expect(assigns[:story]).to eq(story)
           expect(assigns[:note]).to_not be_nil
@@ -85,7 +85,7 @@ describe NotesController do
       describe '#show' do
         specify do
           get :show, xhr: true, params: request_params
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:project]).to eq(project)
           expect(assigns[:story]).to eq(story)
           expect(assigns[:note]).to eq(note)
@@ -97,7 +97,7 @@ describe NotesController do
       describe '#destroy' do
         specify do
           delete :destroy, xhr: true, params: request_params
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:project]).to eq(project)
           expect(assigns[:story]).to eq(story)
           expect(assigns[:note]).to eq(note)

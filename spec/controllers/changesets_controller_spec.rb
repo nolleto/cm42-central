@@ -26,7 +26,7 @@ describe ChangesetsController do
     describe '#index' do
       specify do
         get :index, xhr: true, params: { project_id: project.id }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns[:project]).to eq(project)
         expect(assigns[:changesets].count).to eq(2)
         expect(response.content_type).to eq('application/json')
