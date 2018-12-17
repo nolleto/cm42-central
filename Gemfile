@@ -78,7 +78,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'codeclimate-test-reporter', require: nil
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'poltergeist'
   gem 'rspec-activemodel-mocks'
   gem 'rspec-its'
@@ -96,7 +96,8 @@ group :development do
   gem 'bullet'
   gem 'letter_opener'
   gem 'letter_opener_web'
-  gem 'rubocop', '0.49.1'
+  gem 'rubocop', '0.59.1'
+  gem 'rubocop-rspec'
 end
 
 group :development, :test do
