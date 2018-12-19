@@ -117,8 +117,8 @@ describe StoryOperations do
       VCR.use_cassette('cloudinary_upload_activity') do
         subject.call
       end
-      expect(Activity.last.subject_changes['documents_attributes']).to
-      eq([%w[hello2.jpg hello.jpg], %w[hello2.jpg hello3.jpg]])
+      expect(Activity.last.subject_changes['documents_attributes']).to eq([%w[hello2.jpg hello.jpg],
+                                                                           %w[hello2.jpg hello3.jpg]])
     end
   end
 

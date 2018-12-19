@@ -94,4 +94,14 @@ class Story < ApplicationRecord
     date = Chronic.parse(val)
     self[:release_date] = date
   end
+
+  def saved_changes
+    return super unless Array(documents_attributes_was) != documents_attributes
+
+    super.merge(documents_attributes: [documents_attributes_was, documents_attributes])
+  end
+
+  def saved_changes?
+    documents_attributes_was != documents_attributes || super
+  end
 end
