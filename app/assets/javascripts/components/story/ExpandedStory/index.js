@@ -4,6 +4,7 @@ import ExpandedStoryHistoryLocation from './ExpandedStoryHistoryLocation';
 import ExpandedStoryControls from './ExpandedStoryControls';
 import ExpandedStoryEstimate from './ExpandedStoryEstimate';
 import ExpandedStoryType from './ExpandedStoryType';
+import ExpandedStoryTitle from './ExpandedStoryTitle';
 import { editStory, updateStory } from '../../../actions/story';
 import { connect } from 'react-redux';
 
@@ -16,8 +17,13 @@ export const ExpandedStory = (props) => {
         onCancel={onToggle}
         onSave={() => updateStory(story, project.id)}
       />
-
       <ExpandedStoryHistoryLocation story={story} />
+
+      <ExpandedStoryTitle
+        story={story}
+        onEdit={(newAttributes) => editStory(story.id, newAttributes)}
+      />
+
       <div className="Story__flex">
         <ExpandedStoryEstimate story={story}
           onEdit={(newAttributes) => editStory(story.id, newAttributes)}
