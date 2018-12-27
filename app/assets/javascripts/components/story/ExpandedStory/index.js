@@ -5,11 +5,12 @@ import ExpandedStoryControls from './ExpandedStoryControls';
 import ExpandedStoryEstimate from './ExpandedStoryEstimate';
 import ExpandedStoryType from './ExpandedStoryType';
 import ExpandedStoryDescription from './ExpandedStoryDescription';
-import { editStory, updateStory } from '../../../actions/story';
+import ExpandedStoryTask from './ExpandedStoryTask';
+import { editStory, updateStory, addTask } from '../../../actions/story';
 import { connect } from 'react-redux';
 
 export const ExpandedStory = (props) => {
-  const { story, onToggle, editStory, updateStory, project } = props;
+  const { story, onToggle, editStory, updateStory, project, addTask } = props;
 
   return (
     <div className="Story Story--expanded">
@@ -33,6 +34,10 @@ export const ExpandedStory = (props) => {
         story={story}
         onEdit={(newAttributes) => editStory(story.id, newAttributes)}
       />
+
+      <ExpandedStoryTask
+        onSave={(newAttributes) => addTask(project.id, story.id, newAttributes)}
+      />
     </div>
   );
 };
@@ -47,6 +52,7 @@ export default connect(
   mapStateToProps,
   {
     editStory,
-    updateStory
+    updateStory,
+    addTask
   }
 )(ExpandedStory);

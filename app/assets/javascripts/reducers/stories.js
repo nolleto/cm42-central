@@ -20,6 +20,11 @@ const storiesReducer = (state = initialState, action) => {
         updateIfSameId(action.story.id, (story) => {
           return updateStory(story, action.story);
         }));
+    case actionTypes.ADD_TASK:
+      return [
+        ...state,
+        action.payload
+      ]
     default:
       return state;
   };

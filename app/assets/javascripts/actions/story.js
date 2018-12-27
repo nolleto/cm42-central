@@ -33,3 +33,18 @@ export const editStory = (id, newAttributes) => ({
   id,
   newAttributes
 });
+
+export const addTask = (project, story, newAttributes) => {
+  console.log(`project: ${project} \n story: ${story} \n newAttributes: ${newAttributes}`)
+  return (dispatch, getState, { Story }) => {
+    return Story.newTask(project, story, newAttributes)
+      // .then((task) => {
+      //   dispatch(taskAdd(task));
+      // });
+  };
+};
+
+export const taskAdd = (task) => ({
+  type: actionTypes.ADD_TASK,
+  task
+});

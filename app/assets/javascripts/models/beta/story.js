@@ -75,6 +75,17 @@ export function update(story, projectId) {
     }));
 };
 
+export function newTask(projectId, storyId, task) {
+  return httpService
+    .post(`/projects/${projectId}/stories/${storyId}/tasks`, task)
+    .then((response) => {
+      console.log(response)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+
 export const updateStory = (story, newAttributes) => {
   return {
     ...story,
