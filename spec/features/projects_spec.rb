@@ -129,6 +129,29 @@ describe 'Projects' do
           expect(current_path).to eq(project_path(project))
         end
 
+        it 'archives a project' do
+          visit edit_project_path(project)
+
+          click_on 'Archive'
+
+          expect(current_path).to eq(projects_path)
+          expect(page).to have_text(
+            'Project was successfully archived'
+                          )
+        end
+
+        it 'unarchives a project' do
+          project.archived = true
+          visit edit_project_path(project)
+          binding.pry
+          click_on 'Unarchive'
+
+          expect(current_path).to eq(project_path(project))
+          expect(page).to have_text(
+            'Project was successfully reinstated'
+                          )
+        end
+
         describe 'trying to add a existing user that is not in the current project' do
           let!(:user_to_be_added) { create :user, email: 'x@example.com' }
 
@@ -262,7 +285,7 @@ describe 'Projects' do
         end
 
         it 'shows delete confirmation modal' do
-          expect(page).to have_css('#delete-confirmation-modal') 
+          expect(page).to have_css('#delete-confirmation-modal')
         end
 
         it 'deletes a project', js: true do
